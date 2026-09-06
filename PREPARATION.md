@@ -1,3 +1,29 @@
-# Autodesk Construction Cloud Connector - PREPARATION.md
+# Autodesk Construction Cloud (BIM 360) Connector — Preparation
 
-Standard documentation for Autodesk Construction Cloud Connector in Imperal Cloud.
+**Category:** C47. Construction & Field Service Management  
+**Preparation status:** Complete Primary Specification  
+**Architecture Policy:** Vendor-specific REST/API Integration (Scaffold Mismatch Cleared)
+
+## 1. Паспорт приложения
+- **Название:** Autodesk Construction Cloud (BIM 360) Connector (`autodesk-construction-cloud-connector`)
+- **Официальный ресурс:** https://construction.autodesk.com
+- **Базовый API:** `https://developer.api.autodesk.com/construction/v1`
+- **Назначение:** Полнофункциональная интеграция платформы Imperal Cloud с Autodesk Construction Cloud (BIM 360) для решения задач предметной области: BIM-проектирование, согласование проектной документации, ведение журнала замечаний (Issues) и координация моделей.
+
+## 2. Решаемая проблема
+Bim-проектирование, согласование проектной документации, ведение журнала замечаний (issues) и координация моделей. В настоящее время операторам и ответственным лицам приходится вручную переключаться между системами, дублировать операции и терять целостность аудита. Коннектор предоставляет автоматизированный и надежный шлюз.
+
+## 3. Пользователи, роли и права доступа
+- **Ключевые роли:** BIM-координатор, архитектор, генеральный подрядчик.
+- **Разделение прав:** Доступ только к тем данным и функциям, которые разрешены выданным токеном/учетной записью вендора.
+
+## 4. Ключевые сущности
+проекты (/projects), замечания/коллизии (/issues), документы/модели (/checklists), спецификации.
+
+## 5. Первичный сценарий
+`проверка 3D-модели на коллизии -> создание строительного замечания Issue -> назначение на ответственного подрядчика`.
+
+## 6. Границы и ограничения безопасности
+- Использование принципа BYOC (Bring Your Own Credentials).
+- Никаких захардкоженных секретов. Все токены хранятся в защищенном хранилище платформы.
+- Деструктивные и финансовые действия требуют обязательного подтверждения оператором.
