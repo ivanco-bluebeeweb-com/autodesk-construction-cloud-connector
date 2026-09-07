@@ -35,7 +35,7 @@ async def resolve_client(ctx, connection_id: str = "") -> AutodeskConstructionCl
     return AutodeskConstructionCloudClient(api_token=conn["api_token"], base_url=conn.get("base_url", ""))
 
 @chat.function("connect_autodesk_construction_cloud_connector", "Connect Autodesk Construction Cloud account via credentials.", action_type="write", chain_callable=True, event="autodesk-construction-cloud-connector.connect_autodesk_construction_cloud_connector", effects=["create:connection"], data_model=ConnectionRecord)
-async def connect_autodesk_construction_cloud_connector(params: ConnectParams, ctx) -> ActionResult:
+async def connect_autodesk_construction_cloud_connector(ctx, params: ConnectParams) -> ActionResult:
     client = AutodeskConstructionCloudClient(api_token=params.api_token, base_url=params.base_url)
     res = await client.verify_auth()
     if res.get("status") == "error":
@@ -56,7 +56,7 @@ async def connect_autodesk_construction_cloud_connector(params: ConnectParams, c
     return ActionResult.success(rec, summary=f"Connected Autodesk Construction Cloud ({rec['label']}).")
 
 @chat.function("list_connections", "List configured Autodesk Construction Cloud connections.", action_type="read", chain_callable=True, event="autodesk-construction-cloud-connector.list_connections", effects=["read:connections"], data_model=ConnectionList)
-async def list_connections(params: NoParams, ctx) -> ActionResult:
+async def list_connections(ctx, params: NoParams) -> ActionResult:
     conns = await _load_conns(ctx)
     items = [{
         "id": c["id"],
@@ -68,7 +68,7 @@ async def list_connections(params: NoParams, ctx) -> ActionResult:
     return ActionResult.success({"connections": items, "total": len(items)}, summary=f"Found {len(items)} connection(s).")
 
 @chat.function("disconnect_autodesk_construction_cloud_connector", "Disconnect Autodesk Construction Cloud account and delete stored credentials.", action_type="destructive", chain_callable=True, event="autodesk-construction-cloud-connector.disconnect_autodesk_construction_cloud_connector", effects=["delete:connection"], data_model=DeleteResult)
-async def disconnect_autodesk_construction_cloud_connector(params: ConnectionIdParams, ctx) -> ActionResult:
+async def disconnect_autodesk_construction_cloud_connector(ctx, params: ConnectionIdParams) -> ActionResult:
     conns = await _load_conns(ctx)
     if not conns:
         return ActionResult.error("No connections to disconnect.")
